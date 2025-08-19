@@ -1,0 +1,18 @@
+{
+  "requiredMentions": {
+    "@": [
+      { "userName": "chai_with_java", "name": "Chaiwala Dev", "id": "u101" },
+      { "userName": "pakoda_programmer", "name": "Fritters Singh", "id": "u102" },
+      { "userName": "rickshaw_router", "name": "Auto Query Lal", "id": "u103" },
+      { "userName": "dhaba_debugger", "name": "Paneer Tikka Rao", "id": "u104" },
+      { "userName": "samosa_stack", "name": "Aloo Compiler", "id": "u105" }
+    ],
+    "#": [
+      { "ticketName": "Code chal raha hai sirf Sharma ji ke WiFi pe", "id": "t201" },
+      { "ticketName": "Feature request: chai break ka automatic reminder", "id": "t202" },
+      { "ticketName": "Bug: App sirf 4G Jio SIM pe hi open hota hai", "id": "t203" },
+      { "ticketName": "Error: Maa ne router band kar diya", "id": "t204" },
+      { "ticketName": "Billing bug: Free recharge mil gaya PayTM se", "id": "t205" }
+    ]
+  }
+}
