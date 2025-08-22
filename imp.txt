@@ -1,18 +1,788 @@
 {
   "requiredMentions": {
-    "@": [
-      { "userName": "chai_with_java", "name": "Chaiwala Dev", "id": "u101" },
-      { "userName": "pakoda_programmer", "name": "Fritters Singh", "id": "u102" },
-      { "userName": "rickshaw_router", "name": "Auto Query Lal", "id": "u103" },
-      { "userName": "dhaba_debugger", "name": "Paneer Tikka Rao", "id": "u104" },
-      { "userName": "samosa_stack", "name": "Aloo Compiler", "id": "u105" }
-    ],
-    "#": [
-      { "ticketName": "Code chal raha hai sirf Sharma ji ke WiFi pe", "id": "t201" },
-      { "ticketName": "Feature request: chai break ka automatic reminder", "id": "t202" },
-      { "ticketName": "Bug: App sirf 4G Jio SIM pe hi open hota hai", "id": "t203" },
-      { "ticketName": "Error: Maa ne router band kar diya", "id": "t204" },
-      { "ticketName": "Billing bug: Free recharge mil gaya PayTM se", "id": "t205" }
-    ]
+    "@": {
+      "click": false,
+      "values": [
+        {
+          "userName": "rohit_sharma",
+          "name": "Rohit Sharma",
+          "id": "u401"
+        },
+        {
+          "userName": "ananya_mehta",
+          "name": "Ananya Mehta",
+          "id": "u402"
+        },
+        {
+          "userName": "vikram_patel",
+          "name": "Vikram Patel",
+          "id": "u403"
+        },
+        {
+          "userName": "priya_kapoor",
+          "name": "Priya Kapoor",
+          "id": "u404"
+        },
+        {
+          "userName": "arjun_verma",
+          "name": "Arjun Verma",
+          "id": "u405"
+        }
+      ]
+    },
+    "#": {
+      "click": true,
+      "baseURL": "https://beta.gemini.local/workspace/taskboard/#/project?",
+      "values": [
+        {
+          "ticketName": "Login issue: Users unable to access account",
+          "id": "t501",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "params": {
+            "p_id": 12444,
+            "taskId": 30803,
+            "taskName": "aahaha",
+            "tab": "properties"
+          }
+        },
+        {
+          "ticketName": "Feature request: Dark mode implementation",
+          "id": "t502",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "params": {
+            "p_id": 12444,
+            "taskId": 30803,
+            "taskName": "aahaha",
+            "tab": "properties"
+          }
+        },
+        {
+          "ticketName": "Bug: Payment gateway showing duplicate charges",
+          "id": "t503",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "params": {
+            "p_id": 12444,
+            "taskId": 30803,
+            "taskName": "aahaha",
+            "tab": "properties"
+          }
+        },
+        {
+          "ticketName": "Error: Database connection timeout",
+          "id": "t504",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "params": {
+            "p_id": 12444,
+            "taskId": 30803,
+            "taskName": "aahaha",
+            "tab": "properties"
+          }
+        },
+        {
+          "ticketName": "Support request: Password reset emails not received",
+          "id": "t505",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "params": {
+            "p_id": 12444,
+            "taskId": 30803,
+            "taskName": "aahaha",
+            "tab": "properties"
+          }
+        }
+      ]
+    }
   }
+}
+
+
+////now
+
+{
+    "@": {
+        "click": false,
+        "searchParam": "name",
+        "showValues": [
+            {
+                "item": "name",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "blue"
+                },
+                "icon": "👤"
+            },
+            {
+                "item": "userName",
+                "style": {
+                    "fontStyle": "italic",
+                    "color": "gray"
+                },
+                "icon": "🔗"
+            },
+            {
+                "item": "id",
+                "style": {
+                    "fontSize": "12px",
+                    "color": "darkgreen"
+                },
+                "icon": "🆔"
+            }
+        ],
+        "values": [
+            {
+                "userName": "rohit_sharma",
+                "name": "Rohit Sharma",
+                "id": "u401"
+            },
+            {
+                "userName": "ananya_mehta",
+                "name": "Ananya Mehta",
+                "id": "u402"
+            },
+            {
+                "userName": "vikram_patel",
+                "name": "Vikram Patel",
+                "id": "u403"
+            },
+            {
+                "userName": "priya_kapoor",
+                "name": "Priya Kapoor",
+                "id": "u404"
+            },
+            {
+                "userName": "arjun_verma",
+                "name": "Arjun Verma",
+                "id": "u405"
+            }
+        ]
+    },
+    "#": {
+        "click": true,
+        "searchParam": "ticketName",
+        "baseURL": "https://beta.gemini.local/workspace/taskboard/#/project?",
+        "showValues": [
+            {
+                "item": "ticketName",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "purple"
+                },
+                "icon": "🎫"
+            },
+            {
+                "item": "id",
+                "style": {
+                    "color": "red"
+                },
+                "icon": "📌"
+            }
+        ],
+        "values": [
+            {
+                "ticketName": "Login issue: Users unable to access account",
+                "id": "t501",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "params": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Feature request: Dark mode implementation",
+                "id": "t502",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "params": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Bug: Payment gateway showing duplicate charges",
+                "id": "t503",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "params": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Error: Database connection timeout",
+                "id": "t504",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "params": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Support request: Password reset emails not received",
+                "id": "t505",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "params": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            }
+        ]
+    }
+}
+
+
+
+/////now
+
+{
+  "requiredMentions": {
+    "@": {
+      "click": false,
+      "searchParam":"name",
+      "mentionColor":"blue",
+      "showValues": [
+        { "item": "name", "style": { "fontWeight": "bold", "color": "blue" }, "icon": "👤" },
+        { "item": "userName", "style": { "fontStyle": "italic", "color": "gray" }, "icon": "🔗" },
+        { "item": "id", "style": { "fontSize": "12px", "color": "darkgreen" }, "icon": "🆔" }
+      ],
+      "values": [
+        { "userName": "rohit_sharma", "name": "Rohit Sharma", "id": "u401" },
+        { "userName": "ananya_mehta", "name": "Ananya Mehta", "id": "u402" },
+        { "userName": "vikram_patel", "name": "Vikram Patel", "id": "u403" },
+        { "userName": "priya_kapoor", "name": "Priya Kapoor", "id": "u404" },
+        { "userName": "arjun_verma", "name": "Arjun Verma", "id": "u405" }
+      ]
+    },
+    "#": {
+      "click": true,
+      "searchParam":"ticketName",
+      "mentionColor":"green",
+      "baseURL": "https://beta.gemini.local/workspace/taskboard/#/project?",
+      "showValues": [
+        { "item": "ticketName", "style": { "fontWeight": "bold", "color": "purple" }, "icon": "🎫" },
+        { "item": "id", "style": { "color": "red" }, "icon": "📌" }
+      ],
+      "values": [
+        {
+          "ticketName": "Login issue: Users unable to access account",
+          "id": "t501",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Feature request: Dark mode implementation",
+          "id": "t502",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Bug: Payment gateway showing duplicate charges",
+          "id": "t503",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Error: Database connection timeout",
+          "id": "t504",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Support request: Password reset emails not received",
+          "id": "t505",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        }
+      ]
+    }
+  }
+}
+
+
+////new 
+{
+  "requiredMentions": {
+    "@": {
+      "click": false,
+      "searchParam": "name",
+      "mentionTextColor": "#2749F5",
+      "mentionBgColor":"#D9DFFC",
+      "displayText": "name",
+      "showValues": [
+        { "item": "name", "style": { "fontWeight": "bold", "color": "blue" }, "icon": "👤" },
+        { "item": "userName", "style": { "fontStyle": "italic", "color": "gray" }, "icon": "🔗" },
+        { "item": "id", "style": { "fontSize": "12px", "color": "darkgreen" }, "icon": "🆔" }
+      ],
+      "values": [
+        { "userName": "rohit_sharma", "name": "Rohit Sharma", "id": "u401" },
+        { "userName": "ananya_mehta", "name": "Ananya Mehta", "id": "u402" },
+        { "userName": "vikram_patel", "name": "Vikram Patel", "id": "u403" },
+        { "userName": "priya_kapoor", "name": "Priya Kapoor", "id": "u404" },
+        { "userName": "arjun_verma", "name": "Arjun Verma", "id": "u405" }
+      ]
+    },
+    "#": {
+      "click": true,
+      "searchParam": "ticketName",
+      "mentionTextColor": "#048C32",
+      "mentionBgColor":"#C3E0CE",
+      "displayText": "ticketName",
+      "baseURL": "https://beta.gemini.local/workspace/taskboard/#/project?",
+      "showValues": [
+        { "item": "ticketName", "style": { "fontWeight": "bold", "color": "purple" }, "icon": "🎫" },
+        { "item": "id", "style": { "color": "red" }, "icon": "📌" }
+      ],
+      "values": [
+        {
+          "ticketName": "Login issue: Users unable to access account",
+          "id": "t501",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Feature request: Dark mode implementation",
+          "id": "t502",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Bug: Payment gateway showing duplicate charges",
+          "id": "t503",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Error: Database connection timeout",
+          "id": "t504",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        },
+        {
+          "ticketName": "Support request: Password reset emails not received",
+          "id": "t505",
+          "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+          "queryParams": { "p_id": 12444, "taskId": 30803, "taskName": "aahaha", "tab": "properties" }
+        }
+      ]
+    }
+  }
+}
+
+
+///new 
+
+{
+    "@": {
+        "click": false,
+        "searchParam": "name",
+        "mentionTextColor": "#2749F5",
+        "mentionBgColor": "#D9DFFC",
+        "displayText": "name",
+        "showValues": [
+            {
+                "item": "name",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "blue"
+                },
+                "icon": "👤"
+            },
+            {
+                "item": "userName",
+                "style": {
+                    "fontStyle": "italic",
+                    "color": "gray"
+                },
+                "icon": "🔗"
+            }
+        ],
+        "values": [
+            {
+                "userName": "rohit_sharma",
+                "name": "Rohit Sharma",
+                "id": "u401"
+            },
+            {
+                "userName": "ananya_mehta",
+                "name": "Ananya Mehta",
+                "id": "u402"
+            },
+            {
+                "userName": "vikram_patel",
+                "name": "Vikram Patel",
+                "id": "u403"
+            },
+            {
+                "userName": "priya_kapoor",
+                "name": "Priya Kapoor",
+                "id": "u404"
+            },
+            {
+                "userName": "arjun_verma",
+                "name": "Arjun Verma",
+                "id": "u405"
+            }
+        ]
+    },
+    "#": {
+        "click": true,
+        "searchParam": "ticketName",
+        "mentionTextColor": "#048C32",
+        "mentionBgColor": "#C3E0CE",
+        "displayText": "ticketName",
+        "baseURL": "https://beta.gemini.local/workspace/taskboard/#/project?",
+        "showValues": [
+            {
+                "item": "ticketName",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "purple"
+                },
+                "icon": "🎫"
+            },
+            {
+                "item": "id",
+                "style": {
+                    "color": "red"
+                },
+                "icon": "📌"
+            }
+        ],
+        "values": [
+            {
+                "ticketName": "Login issue: Users unable to access account",
+                "id": "t501",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Feature request: Dark mode implementation",
+                "id": "t502",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Bug: Payment gateway showing duplicate charges",
+                "id": "t503",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Error: Database connection timeout",
+                "id": "t504",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Support request: Password reset emails not received",
+                "id": "t505",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            }
+        ]
+    },
+    "$": {
+        "click": true,
+        "searchParam": "projectName",
+        "mentionTextColor": "#FF6F00",
+        "mentionBgColor": "#FFF3E0",
+        "displayText": "projectName",
+        "baseURL": "https://beta.gemini.local/workspace/projects/#/details?",
+        "showValues": [
+            {
+                "item": "projectName",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "orange"
+                },
+                "icon": "📁"
+            },
+            {
+                "item": "id",
+                "style": {
+                    "color": "darkorange"
+                },
+                "icon": "🆔"
+            }
+        ],
+        "values": [
+            {
+                "projectName": "Website Redesign",
+                "id": "p601",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=601",
+                "queryParams": {
+                    "projectId": 601
+                }
+            },
+            {
+                "projectName": "Mobile App Development",
+                "id": "p602",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=602",
+                "queryParams": {
+                    "projectId": 602
+                }
+            },
+            {
+                "projectName": "CRM Integration",
+                "id": "p603",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=603",
+                "queryParams": {
+                    "projectId": 603
+                }
+            },
+            {
+                "projectName": "API Development",
+                "id": "p604",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=604",
+                "queryParams": {
+                    "projectId": 604
+                }
+            },
+            {
+                "projectName": "Cloud Migration",
+                "id": "p605",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=605",
+                "queryParams": {
+                    "projectId": 605
+                }
+            }
+        ]
+    }
+}
+
+
+///new
+{
+    "@": {
+        "click": false,
+        "searchParam": "name",
+        "mentionTextColor": "#2749F5",
+        "mentionBgColor": "#D9DFFC",
+        "displayText": "name",
+        "showValues": [
+            {
+                "item": "name",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "blue"
+                },
+                "icon": "👤"
+            },
+            {
+                "item": "userName",
+                "style": {
+                    "fontStyle": "italic",
+                    "color": "gray"
+                },
+                "icon": "🔗"
+            }
+        ],
+        "values": [
+            {
+                "userName": "rohit_sharma",
+                "name": "Rohit Sharma",
+                "id": "u401"
+            },
+            {
+                "userName": "ananya_mehta",
+                "name": "Ananya Mehta",
+                "id": "u402"
+            },
+            {
+                "userName": "vikram_patel",
+                "name": "Vikram Patel",
+                "id": "u403"
+            },
+            {
+                "userName": "priya_kapoor",
+                "name": "Priya Kapoor",
+                "id": "u404"
+            },
+            {
+                "userName": "arjun_verma",
+                "name": "Arjun Verma",
+                "id": "u405"
+            }
+        ]
+    },
+    "#": {
+        "click": true,
+        "searchParam": "ticketName",
+        "mentionTextColor": "#048C32",
+        "mentionBgColor": "#C3E0CE",
+        "displayText": "ticketName",
+        "baseURL": "https://beta.gemini.local/workspace/taskboard/#/project?",
+        "showValues": [
+            {
+                "item": "ticketName",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "purple"
+                },
+                "icon": "🎫"
+            },
+            {
+                "item": "id",
+                "style": {
+                    "color": "red"
+                },
+                "icon": "📌"
+            }
+        ],
+        "values": [
+            {
+                "ticketName": "Login issue: Users unable to access account",
+                "id": "t501",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Feature request: Dark mode implementation",
+                "id": "t502",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Bug: Payment gateway showing duplicate charges",
+                "id": "t503",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Error: Database connection timeout",
+                "id": "t504",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            },
+            {
+                "ticketName": "Support request: Password reset emails not received",
+                "id": "t505",
+                "href": "https://beta.gemini.local/workspace/taskboard/#/project?p_id=12444&taskId=30803&taskName=aahaha&tab=properties",
+                "queryParams": {
+                    "p_id": 12444,
+                    "taskId": 30803,
+                    "taskName": "aahaha",
+                    "tab": "properties"
+                }
+            }
+        ]
+    },
+    "$": {
+        "click": true,
+        "searchParam": "projectName",
+        "mentionTextColor": "#FF6F00",
+        "mentionBgColor": "#FFF3E0",
+        "displayText": "projectName",
+        "baseURL": "https://beta.gemini.local/workspace/projects/#/details?",
+        "showValues": [
+            {
+                "item": "projectName",
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "orange"
+                },
+                "icon": "📁"
+            },
+            {
+                "item": "id",
+                "style": {
+                    "color": "darkorange"
+                },
+                "icon": "🆔"
+            }
+        ],
+        "values": [
+            {
+                "projectName": "Website Redesign",
+                "id": "p601",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=601",
+                "queryParams": {
+                    "projectId": 601
+                }
+            },
+            {
+                "projectName": "Mobile App Development",
+                "id": "p602",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=602",
+                "queryParams": {
+                    "projectId": 602
+                }
+            },
+            {
+                "projectName": "CRM Integration",
+                "id": "p603",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=603",
+                "queryParams": {
+                    "projectId": 603
+                }
+            },
+            {
+                "projectName": "API Development",
+                "id": "p604",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=604",
+                "queryParams": {
+                    "projectId": 604
+                }
+            },
+            {
+                "projectName": "Cloud Migration",
+                "id": "p605",
+                "href": "https://beta.gemini.local/workspace/projects/#/details?projectId=605",
+                "queryParams": {
+                    "projectId": 605
+                }
+            }
+        ]
+    }
 }

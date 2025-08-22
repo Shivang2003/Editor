@@ -12,6 +12,9 @@ import {
   Undo2,
   Paperclip,
   Ticket,
+  User,
+  Hash,
+  AtSign
 } from "lucide-react";
 
 // Delta Document class for managing editor state
@@ -65,9 +68,67 @@ class DeltaDocument {
     return false;
   }
 
-  insertMentions(index,text,attributes){
-    console.log("insertMentions triggered", index, text);
-    //rest in else
+  insertMention(index, mention, trigger){
+    // console.log("insertMention triggered", mention);
+    const attributes = { 
+      ...mention, 
+      mention: true, 
+      mentionType: trigger};
+    const displayItem = mention.displayMentionText;
+    console.log("displayItem", displayItem);
+    const displayText = `${trigger}${attributes[displayItem]} `;
+    console.log("displayMentionText", displayText);
+
+
+    //for renderer
+    // if (attributes?.queryParams) {
+    //   // handle queryParams
+    // } else if (attributes?.href) {
+    //   // handle href
+    // } else {
+    //   // fallback
+    // }
+
+    const newOp = { insert: displayText, attributes };
+
+    // Find the operation that contains this index
+    let currentIndex = 0;
+    for (let i = 0; i < this.ops.length; i++) {
+      const op = this.ops[i];
+      const opLength = op.insert.length;
+
+      if (currentIndex + opLength >= index) {
+        const splitPoint = index - currentIndex;
+
+        if (splitPoint === 0) {
+          // Insert at the beginning of this op
+          this.ops.splice(i, 0, newOp);
+        } else if (splitPoint === opLength) {
+          // Insert at the end of this op
+          this.ops.splice(i + 1, 0, newOp);
+        } else {
+          // Split the operation
+          const beforeText = op.insert.substring(0, splitPoint);
+          const afterText = op.insert.substring(splitPoint);
+
+          this.ops.splice(
+            i,
+            1,
+            { insert: beforeText, attributes: op.attributes },
+            newOp,
+            { insert: afterText, attributes: op.attributes }
+          );
+        }
+        break;
+      }
+      currentIndex += opLength;
+    }
+
+    this.mergeConsecutiveOps();
+    return displayText.length;
+  }
+
+   insert(index, text, attributes) {
     this.saveToHistory();
     const newOp = attributes ? { insert: text, attributes } : { insert: text };
 
@@ -107,49 +168,7 @@ class DeltaDocument {
     this.mergeConsecutiveOps();
   }
 
-  insert(index, text, attributes) {
-    //rest in else
-    console.log("insert triggered ho gaya haiiiiiiiiii", index, text);
-    this.saveToHistory();
-    const newOp = attributes ? { insert: text, attributes } : { insert: text };
-
-    // Find the operation that contains this index
-    let currentIndex = 0;
-    for (let i = 0; i < this.ops.length; i++) {
-      const op = this.ops[i];
-      const opLength = op.insert.length;
-
-      if (currentIndex + opLength >= index) {
-        const splitPoint = index - currentIndex;
-
-        if (splitPoint === 0) {
-          // Insert at the beginning of this op
-          this.ops.splice(i, 0, newOp);
-        } else if (splitPoint === opLength) {
-          // Insert at the end of this op
-          this.ops.splice(i + 1, 0, newOp);
-        } else {
-          // Split the operation
-          const beforeText = op.insert.substring(0, splitPoint);
-          const afterText = op.insert.substring(splitPoint);
-
-          this.ops.splice(
-            i,
-            1,
-            { insert: beforeText, attributes: op.attributes },
-            newOp,
-            { insert: afterText, attributes: op.attributes }
-          );
-        }
-        break;
-      }
-      currentIndex += opLength;
-    }
-
-    this.mergeConsecutiveOps();
-  }
-
-  delete(index, length) {
+   delete(index, length) {
     this.saveToHistory();
     let currentIndex = 0;
     let remainingLength = length;
@@ -295,7 +314,6 @@ class DeltaDocument {
         // Apply list formatting
         if (attributes.list === "bullet") {
           newLineText = "• " + newLineText;
-          console.log(newLineText);
         } else if (attributes.list === "ordered") {
           // Get the next number by looking at the current document state
           const number = this.getNextOrderedNumber(lineStart);
@@ -455,6 +473,11 @@ class DeltaDocument {
       const current = this.ops[i];
       const previous = this.ops[i - 1];
 
+      // Don't merge mentions with other ops
+      if (current.attributes?.mention || previous.attributes?.mention) {
+        continue;
+      }
+
       if (
         JSON.stringify(current.attributes) ===
         JSON.stringify(previous.attributes)
@@ -478,13 +501,26 @@ const renderDelta = (element, delta) => {
     if (typeof op.insert === "string") {
       const span = document.createElement("span");
       span.textContent = op.insert;
-
+      console.log("op.attributes", op.attributes);
       // Apply inline formatting
       if (op.attributes) {
         if (op.attributes.bold) span.style.fontWeight = "bold";
         if (op.attributes.italic) span.style.fontStyle = "italic";
         if (op.attributes.underline) span.style.textDecoration = "underline";
         if (op.attributes.color) span.style.color = op.attributes.color;
+        if (op.attributes.mentionTextColor) span.style.color = op.attributes.mentionTextColor;
+        if (op.attributes.mentionBgColor) {
+          span.style.backgroundColor = op.attributes.mentionBgColor;
+          span.style.padding = "2px 4px";
+          span.style.borderRadius = "4px";
+        }
+        if (op.attributes.mention) {
+          span.style.fontWeight = "600";
+          span.classList.add("mention");
+          span.setAttribute("data-mention-type", op.attributes.mentionType);
+          span.setAttribute("data-mention-id", op.attributes.mentionId);
+          span.setAttribute("data-mention-display", op.attributes.mentionDisplay);
+        }
         if (op.attributes.list) {
           span.style.paddingLeft = "0px";
           span.style.textIndent = "-20px";
@@ -716,9 +752,13 @@ export default function Editor({requiredMentions}) {
   const formatRef = useRef({});
   const composingRef = useRef(false);
   const [formatState, setFormatState] = useState({});
-  const mentions = useRef(false);
-
-//   console.log("Required Mentions:", requiredMentions);
+  const [mentionState, setMentionState] = useState({
+      isActive: false,
+      trigger: null,
+      query: '',
+      startIndex: -1,
+      position: { top: 0, left: 0 }
+    });
 
   const rerender = useCallback(() => {
     const el = hostRef.current;
@@ -731,6 +771,161 @@ export default function Editor({requiredMentions}) {
       deltaRef.current.textContent = JSON.stringify(doc.getDelta(), null, 2);
     }
   }, [doc]);
+
+  const checkForMentions = useCallback((text, cursorIndex)=> {
+    const beforeCursor = text.substring(0, cursorIndex);
+    const symbols = Object.keys(requiredMentions);
+    const regex = new RegExp(`([${symbols.map(s => "\\" + s).join("")}])([a-zA-Z0-9_\\s]*)$`);
+    const mentionMatch = beforeCursor.match(regex);
+    if(mentionMatch){
+      console.log("----------------");
+      const trigger = mentionMatch[1]; //all special symbols
+      console.log("Trigger:", trigger);
+      const query = mentionMatch[2];
+      console.log("query",query)
+      const startIndex = cursorIndex - mentionMatch[0].length;
+      if (requiredMentions[trigger]){
+        const el = hostRef.current;
+        const range = document.createRange();
+        const selection = window.getSelection();
+      
+       if (selection.rangeCount > 0){
+         const rect = selection.getRangeAt(0).getBoundingClientRect();
+          const editorRect = el.getBoundingClientRect();
+          console.log(rect, editorRect);
+          setMentionState({
+            isActive: true,
+            trigger,
+            query,
+            startIndex,
+            position: {
+              top: rect.bottom - editorRect.top + 75,
+              left: rect.left - editorRect.left + 15
+            }
+          });
+          return true;
+       }
+      }
+    }
+ setMentionState(prev => ({ ...prev, isActive: false }));
+    return false;
+
+  },[requiredMentions]);
+
+  const MentionDropdown = ({
+    mentions, 
+    position, 
+    onSelect, 
+    onClose, 
+    trigger, 
+    query }) => {
+      //implement mention dropdown logic here
+      const searchParameter = mentions.searchParam;
+      console.log("searchParameter", searchParameter);
+      const [selectedIndex, setSelectedIndex] = useState(0);
+      const dropdownRef = useRef(null);
+
+      const filteredMentions = mentions?.values.filter(mention=>{
+        const searchText = searchParameter;//for search
+        return searchText.toLowerCase().includes(query.toLowerCase());
+      })
+
+      useEffect(() => {
+          const handleKeyDown = (e) => {
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              setSelectedIndex(prev => 
+                prev < filteredMentions.length - 1 ? prev + 1 : 0
+              );
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              setSelectedIndex(prev => 
+                prev > 0 ? prev - 1 : filteredMentions.length - 1
+              );
+            } else if (e.key === 'Enter') {
+              e.preventDefault();
+              if (filteredMentions[selectedIndex]) {
+                onSelect({...filteredMentions[selectedIndex],
+                  mentionTextColor:mentions.mentionTextColor,
+                  mentionBgColor: mentions.mentionBgColor,
+                  displayMentionText: mentions.displayText,
+                  baseUrl: mentions.baseURL,
+                });
+              }
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              onClose();
+            }
+          };
+      
+          document.addEventListener('keydown', handleKeyDown);
+          return () => document.removeEventListener('keydown', handleKeyDown);
+        }, [filteredMentions, selectedIndex, onSelect, onClose]);
+
+      if (filteredMentions.length === 0) return null;
+
+      return(
+        <div
+        ref={dropdownRef}
+        className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto min-w-64"
+        style={{
+          top: position.top,
+          left: position.left,
+        }}
+      >
+        {filteredMentions.map((mention, index) => (
+          <div
+            key={mention.id}
+            className={`px-3 py-2 cursor-pointer flex flex-col gap-1 ${
+              index === selectedIndex ? "bg-blue-50 border-l-2 border-blue-500" : "hover:bg-gray-50"
+            }`}
+            onClick={() => onSelect({...filteredMentions[selectedIndex],
+                  mentionColor:mentions.mentionColor,
+                  displayMentionText: mentions.displayText,
+                  mentionTextColor:mentions.mentionTextColor,
+                  mentionBgColor: mentions.mentionBgColor,
+                  baseUrl: mentions.baseURL,
+                })}
+          >
+            {mentions.showValues.map((showVal, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 text-sm"
+                style={showVal.style || {}}
+              >
+                {showVal.icon && <span>{showVal.icon}</span>}
+                <span>{mention[showVal.item]}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+        )
+    }
+
+    const handleMentionSelect = useCallback((mention) => {
+        const { trigger, startIndex, query } = mentionState;
+        const deleteLength = trigger.length + query.length;
+        
+        // Delete the trigger and query text
+        doc.delete(startIndex, deleteLength);
+        
+        // Insert the mention
+        console.log("sending in insertmention", mention, trigger);
+        const insertedLength = doc.insertMention(startIndex, mention, trigger);
+        
+        // Position cursor after mention
+        doc.setSelection({ index: startIndex + insertedLength, length: 0 });
+        
+        // Close mention dropdown
+        setMentionState(prev => ({ ...prev, isActive: false }));
+        
+        rerender();
+      }, [mentionState, doc, rerender]);
+
+    const closeMentionDropdown = useCallback(() => {
+      setMentionState(prev => ({ ...prev, isActive: false }));
+    }, []);
 
   const syncSelectionFromDOM = useCallback(() => {
     const el = hostRef.current;
@@ -765,165 +960,172 @@ export default function Editor({requiredMentions}) {
   };
 
   useEffect(() => {
-    const el = hostRef.current;
-    if (!el) return;
-
-    const onBeforeInput = (e) => {
-      if (e.isComposing || composingRef.current) return;
-
-      syncSelectionFromDOM();
-      const sel = doc.selection || { index: 0, length: 0 };
-      const attrs = Object.keys(formatRef.current).length
-        ? { ...formatRef.current }
-        : undefined;
-
-      switch (e.inputType) {
-        case "insertText":
-          if (sel.length) doc.delete(sel.index, sel.length);
-          console.log(mentions.current);
-
-          if (requiredMentions && typeof e.data === "string" && mentions.current === false) {
+      const el = hostRef.current;
+      if (!el) return;
+  
+      const onBeforeInput = (e) => {
+        if (e.isComposing || composingRef.current) return;
+  
+        syncSelectionFromDOM();
+        const sel = doc.selection || { index: 0, length: 0 };
+        const attrs = Object.keys(formatRef.current).length
+          ? { ...formatRef.current }
+          : undefined;
+  
+        switch (e.inputType) {
+          case "insertText":
+            if (sel.length) doc.delete(sel.index, sel.length);
             
-            if (Object.keys(requiredMentions).includes(e.data)) {
-                mentions.current = true;
-                console.log("Matched mentions:", requiredMentions[e.data]);
-            } else {
-                mentions.current = false;
-            }
-            }
-
-            if(mentions.current===true) {
-          doc.insertMentions(sel.index, e.data, attrs);
-        doc.setSelection({ index: sel.index + e.data.length, length: 0 });
-          e.preventDefault();
-        }
-          else{
             doc.insert(sel.index, e.data, attrs);
-          doc.setSelection({ index: sel.index + e.data.length, length: 0 });
-          e.preventDefault();
-          }
-          break;
-        case "insertParagraph":
-          e.preventDefault();
-          if (sel.length) doc.delete(sel.index, sel.length);
-
-          // Check if we need special list handling
-          if (doc.handleEnterKey(sel.index)) {
-            // List handling was done, just rerender
-          } else {
-            // Normal paragraph insertion
-            doc.insert(sel.index, "\n");
-            doc.setSelection({ index: sel.index + 1, length: 0 });
-          }
-          break;
-        case "deleteContentBackward":
-          if (sel.length) doc.delete(sel.index, sel.length);
-          else if (sel.index > 0) {
-            // Special handling for list items
-            const text = doc.getText();
-            const lineStart = text.lastIndexOf("\n", sel.index - 1) + 1;
-            const currentLine = text.substring(lineStart, sel.index);
-
-            // Check if we're at the beginning of a list item (right after marker)
-            if (
-              (currentLine === "• " || /^\d+\. $/.test(currentLine)) &&
-              sel.index === lineStart + currentLine.length
-            ) {
-              // Remove list formatting and convert to regular text
-              doc.delete(lineStart, currentLine.length);
-              doc.setSelection({ index: lineStart, length: 0 });
+            doc.setSelection({ index: sel.index + e.data.length, length: 0 });
+            
+            // Check for mentions after inserting text
+            setTimeout(() => {
+              const text = doc.getText();
+              checkForMentions(text, sel.index + e.data.length);
+            }, 0);
+            
+            e.preventDefault();
+            break;
+            
+          case "insertParagraph":
+            e.preventDefault();
+            if (sel.length) doc.delete(sel.index, sel.length);
+  
+            // Check if we need special list handling
+            if (doc.handleEnterKey(sel.index)) {
+              // List handling was done, just rerender
             } else {
-              doc.delete(sel.index - 1, 1);
-              doc.setSelection({
-                index: Math.max(sel.index - 1, 0),
-                length: 0,
-              });
+              // Normal paragraph insertion
+              doc.insert(sel.index, "\n");
+              doc.setSelection({ index: sel.index + 1, length: 0 });
             }
-          }
-          e.preventDefault();
-          break;
-        case "deleteContentForward":
-          if (sel.length) doc.delete(sel.index, sel.length);
-          else doc.delete(sel.index, 1);
-          doc.setSelection({ index: sel.index, length: 0 });
-          e.preventDefault();
-          break;
-      }
-
-      rerender();
-    };
-
-    const onKeyDown = (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        switch (e.key.toLowerCase()) {
-          case "b":
-            e.preventDefault();
-            handleCommand({ type: "bold" });
+            
+            // Close mention dropdown on enter
+            setMentionState(prev => ({ ...prev, isActive: false }));
             break;
-          case "i":
-            e.preventDefault();
-            handleCommand({ type: "italic" });
-            break;
-          case "u":
-            e.preventDefault();
-            handleCommand({ type: "underline" });
-            break;
-          case "z":
-            e.preventDefault();
-            if (e.shiftKey) {
-              handleCommand({ type: "redo" });
-            } else {
-              handleCommand({ type: "undo" });
+            
+          case "deleteContentBackward":
+            if (sel.length) doc.delete(sel.index, sel.length);
+            else if (sel.index > 0) {
+              // Special handling for list items
+              const text = doc.getText();
+              const lineStart = text.lastIndexOf("\n", sel.index - 1) + 1;
+              const currentLine = text.substring(lineStart, sel.index);
+  
+              // Check if we're at the beginning of a list item (right after marker)
+              if (
+                (currentLine === "• " || /^\d+\. $/.test(currentLine)) &&
+                sel.index === lineStart + currentLine.length
+              ) {
+                // Remove list formatting and convert to regular text
+                doc.delete(lineStart, currentLine.length);
+                doc.setSelection({ index: lineStart, length: 0 });
+              } else {
+                doc.delete(sel.index - 1, 1);
+                doc.setSelection({
+                  index: Math.max(sel.index - 1, 0),
+                  length: 0,
+                });
+              }
             }
-            break;
-          case "y":
+            
+            // Check for mentions after deletion
+            setTimeout(() => {
+              const text = doc.getText();
+              const newIndex = Math.max(sel.index - 1, 0);
+              checkForMentions(text, newIndex);
+            }, 0);
+            
             e.preventDefault();
-            handleCommand({ type: "redo" });
+            break;
+            
+          case "deleteContentForward":
+            if (sel.length) doc.delete(sel.index, sel.length);
+            else doc.delete(sel.index, 1);
+            doc.setSelection({ index: sel.index, length: 0 });
+            e.preventDefault();
             break;
         }
-      }
-    };
-
-    const onPaste = (e) => {
-      e.preventDefault();
-      syncSelectionFromDOM();
-      const sel = doc.selection || { index: 0, length: 0 };
-      const pasteText = e.clipboardData.getData("text/plain") || "";
-      if (sel.length) doc.delete(sel.index, sel.length);
-      const attrs = Object.keys(formatRef.current).length
-        ? { ...formatRef.current }
-        : undefined;
-        console.log("842");
-      doc.insert(sel.index, pasteText, attrs);
-      doc.setSelection({ index: sel.index + pasteText.length, length: 0 });
+  
+        rerender();
+      };
+  
+      const onKeyDown = (e) => {
+        // Don't handle keyboard shortcuts if mention dropdown is active
+        if (mentionState.isActive) {
+          return; // Let MentionDropdown handle the keys
+        }
+  
+        if (e.ctrlKey || e.metaKey) {
+          switch (e.key.toLowerCase()) {
+            case "b":
+              e.preventDefault();
+              handleCommand({ type: "bold" });
+              break;
+            case "i":
+              e.preventDefault();
+              handleCommand({ type: "italic" });
+              break;
+            case "u":
+              e.preventDefault();
+              handleCommand({ type: "underline" });
+              break;
+            case "z":
+              e.preventDefault();
+              if (e.shiftKey) {
+                handleCommand({ type: "redo" });
+              } else {
+                handleCommand({ type: "undo" });
+              }
+              break;
+            case "y":
+              e.preventDefault();
+              handleCommand({ type: "redo" });
+              break;
+          }
+        }
+      };
+  
+      const onPaste = (e) => {
+        e.preventDefault();
+        syncSelectionFromDOM();
+        const sel = doc.selection || { index: 0, length: 0 };
+        const pasteText = e.clipboardData.getData("text/plain") || "";
+        if (sel.length) doc.delete(sel.index, sel.length);
+        const attrs = Object.keys(formatRef.current).length
+          ? { ...formatRef.current }
+          : undefined;
+        doc.insert(sel.index, pasteText, attrs);
+        doc.setSelection({ index: sel.index + pasteText.length, length: 0 });
+        rerender();
+      };
+  
+      const onCompositionStart = () => (composingRef.current = true);
+      const onCompositionEnd = () => {
+        composingRef.current = false;
+        syncSelectionFromDOM();
+        rerender();
+      };
+  
+      el.addEventListener("beforeinput", onBeforeInput);
+      el.addEventListener("keydown", onKeyDown);
+      el.addEventListener("paste", onPaste);
+      el.addEventListener("compositionstart", onCompositionStart);
+      el.addEventListener("compositionend", onCompositionEnd);
+      document.addEventListener("selectionchange", syncSelectionFromDOM);
+  
       rerender();
-    };
-
-    const onCompositionStart = () => (composingRef.current = true);
-    const onCompositionEnd = () => {
-      composingRef.current = false;
-      syncSelectionFromDOM();
-      rerender();
-    };
-
-    el.addEventListener("beforeinput", onBeforeInput);
-    el.addEventListener("keydown", onKeyDown);
-    el.addEventListener("paste", onPaste);
-    el.addEventListener("compositionstart", onCompositionStart);
-    el.addEventListener("compositionend", onCompositionEnd);
-    document.addEventListener("selectionchange", syncSelectionFromDOM);
-
-    rerender();
-
-    return () => {
-      el.removeEventListener("beforeinput", onBeforeInput);
-      el.removeEventListener("keydown", onKeyDown);
-      el.removeEventListener("paste", onPaste);
-      el.removeEventListener("compositionstart", onCompositionStart);
-      el.removeEventListener("compositionend", onCompositionEnd);
-      document.removeEventListener("selectionchange", syncSelectionFromDOM);
-    };
-  }, [doc, rerender, syncSelectionFromDOM, requiredMentions]);
+  
+      return () => {
+        el.removeEventListener("beforeinput", onBeforeInput);
+        el.removeEventListener("keydown", onKeyDown);
+        el.removeEventListener("paste", onPaste);
+        el.removeEventListener("compositionstart", onCompositionStart);
+        el.removeEventListener("compositionend", onCompositionEnd);
+        document.removeEventListener("selectionchange", syncSelectionFromDOM);
+      };
+    }, [doc, rerender, syncSelectionFromDOM, checkForMentions, mentionState.isActive]);
 
   const handleCommand = useCallback(
     (cmd) => {
@@ -1004,11 +1206,22 @@ export default function Editor({requiredMentions}) {
           contentEditable
           role="textbox"
           spellCheck={false}
-          className="outline-none p-4 min-h-[300px] text-base leading-relaxed bg-black text-white"
+          className="outline-none p-4 min-h-[300px] text-base leading-relaxed bg-white text-black"
           style={{
             whiteSpace: "pre-wrap",
           }}
         />
+        {mentionState.isActive && (
+            <MentionDropdown
+              mentions={requiredMentions[mentionState.trigger]}
+              position={mentionState.position}
+              onSelect={handleMentionSelect}
+              onClose={closeMentionDropdown}
+              trigger={mentionState.trigger}
+              query={mentionState.query}
+            />
+          )}
+
       </div>
 
       <div className="mt-6">
@@ -1024,7 +1237,7 @@ export default function Editor({requiredMentions}) {
             const delta = doc.getDelta(); // get the Delta from your editor
             console.log("Sending Delta:", JSON.stringify(delta));
 
-            fetch("http://localhost:5000/api/save-notes", {
+            fetch("http://localhost:5000/api/save-delta", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ delta }), // send the Delta as-is
